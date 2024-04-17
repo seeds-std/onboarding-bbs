@@ -34,7 +34,7 @@ $articles = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>インターンシップ掲示板</title>
+    <title>オンボーディング掲示板</title>
     <style>
         textarea {
             resize: vertical;
@@ -49,7 +49,7 @@ $articles = [
 </head>
 <body>
     <header>
-        <h1>インターンシップ掲示板</h1>
+        <h1>オンボーディング掲示板</h1>
     </header>
     <main>
         <ul>
