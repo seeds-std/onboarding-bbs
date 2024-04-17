@@ -4,6 +4,10 @@
 
 このリポジトリを自身のアカウントにforkしてください
 
+## 完成イメージ
+
+https://github.com/seeds-std/onboarding-bbs/assets/156643741/c103f668-ae81-4295-baaa-92454efdd99b
+
 ## フォルダの構成
 
 - `demo/playground.php`... ほぼ何もないPHPのファイルです。自由にお使いください
