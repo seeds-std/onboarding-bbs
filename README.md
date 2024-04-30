@@ -53,5 +53,5 @@ docker-compose up -d
 
 ## チャレンジ課題
 
-- HTML, CSSを使ってサイトをデザイン
+- HTML、CSSを使ってサイトをデザイン
 - Twig（テンプレートエンジン）を利用する
