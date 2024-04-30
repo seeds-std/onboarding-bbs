@@ -18,12 +18,16 @@ $connection = connectDB();
 /* ----------------------------------------
  * データベースから投稿されている内容を取得する
  * ---------------------------------------- */
-
-// ダミーデータ
+$statement = mysqli_prepare($connection, 'SELECT * FROM `articles`');
+mysqli_stmt_execute($statement);
+$result = mysqli_stmt_get_result($statement);
+$articles = mysqli_fetch_all($result, MYSQLI_ASSOC);
+//dd($articles);
+/*ダミーデータ
 $articles = [
     ['id' => 1, 'name' => 'Dummy', 'content' => 'Dummyコンテンツ', 'created_at' => '2020-12-09 00:00:00', 'updated_at' => '2020-12-09 00:00:00'],
     ['id' => 2, 'name' => 'ダミー', 'content' => 'ダミーContent', 'created_at' => '2020-12-09 12:00:00', 'updated_at' => '2020-12-09 12:00:00'],
-];
+]; */
 
 ?>
 
@@ -56,10 +60,10 @@ $articles = [
             <?php foreach ($articles as $article) { ?>
                 <li>
                     <div>
-                        <?= $article['id'] ?>:&nbsp;<?=$article['name'] ?>&nbsp;<?= $article['updated_at'] ?>
+                        <?= $article['id'] ?>:&nbsp;<?= htmlspecialchars($article['name']) ?>&nbsp;<?= $article['updated_at'] ?>
                     </div>
-                    <div><?= $article['content'] ?></div>
-                    <div style="display: inline-flex; display: none">
+                    <div><?= htmlspecialchars($article['content']) ?></div>
+                    <div style="display: inline-flex; ">
                         <form action="editing.php" method="post">
                             <input type="hidden" name="id" value="<?= $article['id'] ?>">
                             <button type="submit">編集</button>
