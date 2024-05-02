@@ -20,5 +20,6 @@ define('DB_PASSWORD', 'password');
 function connectDB()
 {
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT); // 問題があった場合に例外を出す
-    return null;
+    $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT);
+    return $connection;
 }

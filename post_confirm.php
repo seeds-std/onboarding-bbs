@@ -7,13 +7,18 @@ require_once 'private/bootstrap.php';
 /* --------------------------------------------------
  * セッション開始
  * -------------------------------------------------- */
-
+session_start();
 /* --------------------------------------------------
  * 送られてきた値を取得する
  * セッションにも保存しておく
  * -------------------------------------------------- */
-$name = '';
-$content =  '';
+//送られてきた値を取得する
+$name = $_POST['name'];
+$content = $_POST['content'];
+
+//セッションに保存する
+$_SESSION['name'] = $name;
+$_SESSION['content'] = $content;
 
 /* --------------------------------------------------
  * 値のバリデーションを行う
@@ -21,7 +26,7 @@ $content =  '';
  * 入力された値が正しいフォーマットで送られているかを確認する
  * 今回は値が入力されているかのみを確認する
  * -------------------------------------------------- */
-if(true) {
+if(empty($name) || empty($content)) {
     redirect('/index.php');
 }
 
@@ -30,6 +35,9 @@ if(true) {
  * 今回は時刻をトークンとする
  * -------------------------------------------------- */
 $token = strval(time());
+
+//トークンをセッションに保存する
+$_SESSION['token'] = $token;
 
 ?>
 
@@ -50,8 +58,8 @@ $token = strval(time());
         <div>下記の内容で投稿しますがよろしいですか?</div>
         <table>
             <tbody>
-            <tr><th>名前</th><td><?= $name ?></td></tr>
-            <tr><th>投稿内容</th><td><?= $content ?></td></tr>
+            <tr><th>名前</th><td><?= htmlspecialchars($name) ?></td></tr>
+            <tr><th>投稿内容</th><td><?= htmlspecialchars($content) ?></td></tr>
             </tbody>
         </table>
         <form action="post_complete.php" method="post">
