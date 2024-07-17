@@ -5,12 +5,14 @@
 require_once 'private/bootstrap.php';
 require_once 'private/database.php';
 
+session_start();
 /* --------------------------------------------------
  * 送られてきた値を取得する
  * -------------------------------------------------- */
-$token = '';
-$name = '';
-$content = '';
+$token = $_POST['token'];
+$name = $_POST['name'];
+$content = $_POST['content'];
+// var_dump($token,$name,$content);
 
 /* --------------------------------------------------
  * 送られてきたトークンのバリデーション
@@ -18,7 +20,7 @@ $content = '';
  * セッションに保存されているトークンと比較し、
  * 一致していなかった場合はトップ画面にリダイレクトする
  * -------------------------------------------------- */
-if(true) {
+if($_SESSION['token'] != $token) {
     unset($_SESSION['token']);
     redirect('/index.php');
 }
@@ -26,18 +28,23 @@ if(true) {
 /* --------------------------------------------------
  * 値のバリデーションを行う
  * -------------------------------------------------- */
-if(true) {
+if($name == '' && $content == '') {
     redirect('/editing.php');
 }
 
 /* --------------------------------------------------
  * セッション内に保存したIDを取得する
  * -------------------------------------------------- */
-$id = '';
-
+$id = $_SESSION['id'];
 /* --------------------------------------------------
  * データの更新処理
  * -------------------------------------------------- */
+$connection = connectDB();
+$stmt = $connection->prepare("UPDATE articles SET `name` = :name,`content` = :content WHERE `id` = :id");
+$stmt->bindValue(':name',$name,PDO::PARAM_STR);
+$stmt->bindValue(':content',$content,PDO::PARAM_STR);
+$stmt->bindValue(':id',$id,PDO::PARAM_INT);
+$stmt->execute();
 
 /* --------------------------------------------------
  * セッション内のデータを削除する

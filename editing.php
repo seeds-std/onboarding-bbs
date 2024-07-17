@@ -9,8 +9,9 @@ require_once 'private/database.php';
  * 送られてきた値を取得する
  * セッションにも保存しておく
  * -------------------------------------------------- */
-$id = '';
-
+session_start();
+ $id = $_POST['id'];
+$_SESSION['id'] = $id;
 /* --------------------------------------------------
  * 値のバリデーションを行う
  *
@@ -18,27 +19,43 @@ $id = '';
  * 2.データベースに対象IDのレコードが存在するか
  * -------------------------------------------------- */
 // 1.値が入力されているか
-if(true) {
+if($id == '') {
     redirect('/index.php');
 }
 
 // 2.データベースに対象IDのレコードが存在するか
-if(true) {
+
+//データベースに接続
+$connection = connectDB();
+//idが存在するか確認。１つでも見つかったら終了。
+$stmt = $connection->prepare("SELECT * FROM articles WHERE id = :id LIMIT 1");
+$stmt->bindValue(':id',$id,PDO::PARAM_INT);
+$stmt->execute();
+$checkid = $stmt->fetchColumn();
+if($checkid == false ) {
     redirect('/index.php');
 }
 
 /* --------------------------------------------------
  * 編集する投稿のデータ
  * -------------------------------------------------- */
-$name = '';
-$content = '';
+//idが一致する名前を取得するsql
+$stmt = $connection->prepare("SELECT name FROM articles WHERE id = :id");
+$stmt->bindValue(':id',$id,PDO::PARAM_INT);
+$stmt->execute();
+$name = $stmt->fetchColumn();
+//idが一致するコンテンツを取得するsql
+$stmt = $connection->prepare("SELECT content FROM articles WHERE id = :id");
+$stmt->bindValue(':id',$id,PDO::PARAM_INT);
+$stmt->execute();
+$content = $stmt->fetchColumn();
 
 /* --------------------------------------------------
  * 編集画面と編集完了画面で利用するトークンを発行する
  * 今回は時刻をトークンとする
  * -------------------------------------------------- */
 $token = strval(time());
-
+$_SESSION['token'] = $token;
 ?>
 
 <!-- 描画するHTML -->
