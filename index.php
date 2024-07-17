@@ -18,12 +18,13 @@ $connection = connectDB();
 /* ----------------------------------------
  * データベースから投稿されている内容を取得する
  * ---------------------------------------- */
-
-// ダミーデータ
-$articles = [
-    ['id' => 1, 'name' => 'Dummy', 'content' => 'Dummyコンテンツ', 'created_at' => '2020-12-09 00:00:00', 'updated_at' => '2020-12-09 00:00:00'],
-    ['id' => 2, 'name' => 'ダミー', 'content' => 'ダミーContent', 'created_at' => '2020-12-09 12:00:00', 'updated_at' => '2020-12-09 12:00:00'],
-];
+$stmt = $connection->prepare("SELECT * FROM articles");
+$stmt->execute();
+// ダミーデータ　実装前用の画面
+// $articles = [
+//     ['id' => 1, 'name' => 'Dummy', 'content' => 'Dummyコンテンツ', 'created_at' => '2020-12-09 00:00:00', 'updated_at' => '2020-12-09 00:00:00'],
+//     ['id' => 2, 'name' => 'ダミー', 'content' => 'ダミーContent', 'created_at' => '2020-12-09 12:00:00', 'updated_at' => '2020-12-09 12:00:00'],
+// ];
 
 ?>
 
@@ -53,15 +54,15 @@ $articles = [
     </header>
     <main>
         <ul>
-            <?php foreach ($articles as $article) { ?>
+            <?php foreach ($stmt as $article) { ?>
                 <li>
                     <div>
-                        <?= $article['id'] ?>:&nbsp;<?=$article['name'] ?>&nbsp;<?= $article['updated_at'] ?>
+                        <?= $article['id']?>:&nbsp;<?=htmlspecialchars($article['name'],ENT_QUOTES,'UTF-8') ?>&nbsp;<?= $article['updated_at'] ?>
                     </div>
-                    <div><?= $article['content'] ?></div>
-                    <div style="display: inline-flex; display: none">
+                    <div><?= htmlspecialchars($article['content'],ENT_QUOTES,'UTF-8') ?></div>
+                    <div style="display: inline-flex;">
                         <form action="editing.php" method="post">
-                            <input type="hidden" name="id" value="<?= $article['id'] ?>">
+                            <input type="hidden" name="id" value="<?= $article['id'] ?> ">
                             <button type="submit">編集</button>
                         </form>
                         &nbsp;
