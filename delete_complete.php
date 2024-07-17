@@ -1,4 +1,29 @@
 <?php
+//必要なファイルの読み込み
+require_once 'private/bootstrap.php';
+require_once 'private/database.php';
+
+session_start();
+$token = $_POST['token'];
+
+//DB接続
+$connection = connectDB();
+//トークンの値を比較　違ったらリダイレクト
+if($token != $_SESSION['token']){
+    unset($_SESSION['token']);
+    redirect('/index.php');
+}
+
+//セッションからIDを取得
+$id = $_SESSION['id'];
+
+//削除処理
+$stmt = $connection->prepare("DELETE FROM articles WHERE id = :id");
+$stmt->bindValue(':id',$id,PDO::PARAM_INT);
+$stmt->execute();
+
+unset($_SESSION['token']);
+unset($_SESSION['id']);
 
 ?>
 

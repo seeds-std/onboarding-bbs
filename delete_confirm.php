@@ -9,7 +9,9 @@ require_once 'private/database.php';
  * 送られてきた値を取得する
  * セッションにも保存しておく
  * -------------------------------------------------- */
-$id = '';
+session_start();
+$id = $_POST['id'];
+$_SESSION['id'] = $id;
 
 /* --------------------------------------------------
  * 値のバリデーションを行う
@@ -17,18 +19,31 @@ $id = '';
  * 1.値が入力されているか
  * 2.データベースに対象IDのレコードが存在するか
  * -------------------------------------------------- */
-
+if($id == ''){
+    redirect('/index.php');
+}
 /* --------------------------------------------------
  * 削除する投稿のデータ
  * -------------------------------------------------- */
-$name = '';
-$content = '';
+//DB接続
+$connection = connectDB();
+//条件が一致する名前を持ってくる
+$stmt = $connection->prepare("SELECT name FROM articles WHERE id = :id");
+$stmt->bindValue(':id',$id,PDO::PARAM_INT);
+$stmt->execute();
+$name = $stmt->fetchColumn();
+//条件が一致するcontentを持ってくる
+$stmt = $connection->prepare("SELECT content FROM articles WHERE id = :id");
+$stmt->bindValue(':id',$id,PDO::PARAM_INT);
+$stmt->execute();
+$content = $stmt->fetchColumn();
 
 /* --------------------------------------------------
  * 確認画面と削除画面で利用するトークンを発行する
  * 今回は時刻をトークンとする
  * -------------------------------------------------- */
 $token = strval(time());
+$_SESSION['token'] = $token;
 
 ?>
 
